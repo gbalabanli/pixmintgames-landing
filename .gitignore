@@ -1,0 +1,29 @@
+# Local run artifacts: detached server logs / captured stdout-stderr from previews
+.logs/
+*.log
+
+# OS metadata junk (macOS Finder, Windows Explorer / shell)
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secrets and environment files: never commit credentials or per-machine config
+.env
+.env.*
+*.token
+
+# Python tooling artifacts (uv venv, bytecode caches) in case of local scripts
+.venv/
+__pycache__/
+*.pyc
+
+# Node tooling artifacts (pnpm store links, installs) in case of local scripts
+node_modules/
+
+# Editor / IDE workspace state (machine-specific, not project config)
+.idea/
+.vscode/
+
+# Local browser / linter caches created by verification runs
+.playwright-mcp/
+.ruff_cache/

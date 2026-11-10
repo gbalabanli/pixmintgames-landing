@@ -1,0 +1,65 @@
+# Publishes ONLY the static `site/` folder to GitHub Pages.
+# No build step: the landing is plain HTML/CSS/JS, so the artifact is the source.
+#
+# Custom domain: GitHub Pages reads `site/CNAME` (pixmintgames.com) to bind the
+# domain for this deployment. In Cloudflare the apex A/AAAA records must stay
+# DNS-only (grey cloud) so the Let's Encrypt HTTP-01 challenge reaches GitHub
+# Pages and the certificate can be issued; proxying the apex breaks issuance.
+name: "Deploy landing to GitHub Pages"
+
+on:
+  push:
+    branches:
+      - main
+    # Only redeploy for site content or this workflow itself.
+    paths:
+      - "site/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+# Least privilege by default; the deploy job elevates for Pages + OIDC.
+permissions:
+  contents: read
+
+# One Pages deployment at a time; never cancel a deploy mid-flight.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Fail fast: CNAME must exist or the custom domain would silently drop.
+      - name: Guard - required site files present
+        run: test -f site/index.html && test -f site/CNAME
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      # Artifact is scoped to ./site on purpose: repo docs (.ai/, AGENTS.md,
+      # README.md, reqs-manifest.md) must never be published.
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Privacy Policy — PixMint Games</title>
+  <meta name="description" content="How PixMint Games handles crash reports, opt-in analytics, and support email for the PixMint Android app. No accounts, no ads, no ad SDKs.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://pixmintgames.com/privacy.html">
+  <meta name="theme-color" content="#1E1B2E">
+  <meta name="color-scheme" content="dark">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PixMint Games">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:url" content="https://pixmintgames.com/privacy.html">
+  <meta property="og:title" content="Privacy Policy — PixMint Games">
+  <meta property="og:description" content="How PixMint Games handles crash reports, opt-in analytics, and support email for the PixMint Android app. No accounts, no ads, no ad SDKs.">
+  <meta property="og:image" content="https://pixmintgames.com/assets/og-image.png">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Privacy Policy — PixMint Games">
+  <meta name="twitter:description" content="How PixMint Games handles crash reports, opt-in analytics, and support email for the PixMint Android app. No accounts, no ads, no ad SDKs.">
+  <meta name="twitter:image" content="https://pixmintgames.com/assets/og-image.png">
+
+  <!-- Icons -->
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+  <!-- Google Fonts: Orbitron for display, Plus Jakarta Sans for body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css">
+
+  <style>
+    h1 {
+      margin: 16px 0 14px; font-family: var(--font-display);
+      font-size: clamp(1.9rem, 4.5vw, 2.6rem); font-weight: 800;
+      line-height: 1.25; letter-spacing: -0.4px; color: var(--cream);
+    }
+    .effective { margin-top: 14px; font-size: 0.9rem; color: var(--muted); }
+    .effective time { font-weight: 600; color: var(--cream); }
+    .policy-box { margin-top: 32px; }
+    .policy-box h2 { align-items: baseline; margin: 36px 0 12px; font-size: 1.25rem; }
+    .policy-box h2:first-child { margin-top: 0; }
+    .policy-box ul { margin: 8px 0 12px; padding-left: 22px; }
+    .policy-box li + li { margin-top: 6px; }
+    .policy-box strong { font-weight: 600; color: var(--cream); }
+    .nav-links a[aria-current="page"] { color: var(--cream); }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header>
+    <div class="container nav">
+      <div class="logo">PixMint <span>Games</span></div>
+      <nav class="nav-links" aria-label="Main">
+        <a href="index.html#about">About</a>
+        <a href="index.html#games">Games</a>
+        <a href="privacy.html" aria-current="page">Privacy</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section id="policy">
+      <div class="container">
+        <p class="eyebrow">Legal</p>
+        <h1>Privacy Policy</h1>
+        <p class="section-lead">
+          PixMint collects as little as possible: crash reports when something breaks, play counts only if you opt in, and nothing else.
+        </p>
+        <p class="effective">Effective date: <time datetime="2026-11-10">10 November 2026</time></p>
+
+        <div class="policy-box">
+
+          <h2>1. Who we are</h2>
+          <p>
+            PixMint Games is an independent game studio based in İstanbul, Türkiye. For the data described in this policy, PixMint Games is the data controller.
+          </p>
+          <p>
+            This policy covers the PixMint mobile app for Android (package <strong>com.pixmint.games</strong>) and this website, <a href="https://pixmintgames.com/">https://pixmintgames.com</a>. It does not cover other apps, websites, or services.
+          </p>
+          <p>
+            You can reach us at <a href="mailto:contact@pixmintgames.com">contact@pixmintgames.com</a>.
+          </p>
+
+          <h2>2. Summary</h2>
+          <p>Here is the short version:</p>
+          <ul>
+            <li>There are no accounts and no sign-up. The app shows no ads and bundles no advertising SDKs.</li>
+            <li>Crash reports are on by default. They tell us what broke, and you can turn them off in the app.</li>
+            <li>Anonymous play counts are off by default. They are collected only if you opt in.</li>
+            <li>Your game progress stays on your device. Uninstalling the app removes it.</li>
+          </ul>
+          <p>The sections below explain each point in more detail.</p>
+
+          <h2>3. Information we collect</h2>
+          <p>
+            We collect information in three situations, and only as described here.
+          </p>
+
+          <h3>Crash reports (Crashlytics)</h3>
+          <p>
+            When the app crashes, Crashlytics — a Google Firebase service — sends us a crash report. A report contains the stack trace (the technical path the code took before the crash), your device model, your operating system version, the app version, and the time of the crash. Crash reporting is on by default. We use these reports only to find and fix defects. You can turn crash reporting off in the app.
+          </p>
+
+          <h3>Usage analytics (Firebase Analytics)</h3>
+          <p>
+            Firebase Analytics can record anonymous, aggregated event counts, such as how many times a game is opened and how long a session lasts. These events are linked to a randomly generated app instance identifier, not to your name, your email address, or any account — the app has no accounts. Analytics is off by default. Nothing is collected unless you opt in.
+          </p>
+
+          <h3>Support correspondence</h3>
+          <p>
+            If you email us, we receive your email address and whatever you choose to include in the message — for example a screenshot, your device model, or a description of the problem. Please send only what we need to help you.
+          </p>
+
+          <h3>What stays on your device</h3>
+          <p>
+            There are no user accounts and no profiles. Your game progress, scores, and settings are stored on your device and are not uploaded to us.
+          </p>
+
+          <h2>4. What we do not collect</h2>
+          <p>We do not collect, and the app does not request permission to access:</p>
+          <ul>
+            <li>your name, or your email address unless you contact us;</li>
+            <li>your precise or approximate location;</li>
+            <li>your contacts, photos, videos, or other media;</li>
+            <li>your SMS messages or phone state;</li>
+            <li>your microphone or your camera;</li>
+            <li>your advertising ID, or any advertising or analytics identifier used for ad targeting.</li>
+          </ul>
+          <p>
+            No advertising SDKs are bundled with the app, and we do not serve ads.
+          </p>
+
+          <h2>5. How we use information</h2>
+          <p>We use the information described above to:</p>
+          <ul>
+            <li>operate and maintain the app;</li>
+            <li>diagnose crashes and fix defects;</li>
+            <li>understand, in aggregate, which features are used;</li>
+            <li>respond to your support requests;</li>
+            <li>comply with applicable law and protect our legal rights.</li>
+          </ul>
+          <p>
+            We do not use your information for profiling or automated decision-making. We do not sell personal data, and we do not share it for cross-context behavioral advertising.
+          </p>
+
+          <h2>6. Legal bases</h2>
+          <p>
+            If you are in the European Economic Area, the United Kingdom, or another jurisdiction that requires a legal basis for processing, we rely on the following:
+          </p>
+          <ul>
+            <li><strong>Consent</strong> — for Firebase Analytics. You opt in before anything is collected, and you can withdraw your consent at any time.</li>
+            <li><strong>Legitimate interests</strong> — for crash diagnostics and for keeping the app and this website secure. We have a legitimate interest in fixing defects and preventing abuse, and this interest does not override your rights.</li>
+            <li><strong>Consent or legitimate interests</strong> — for answering your support emails, depending on what you ask us to do.</li>
+            <li><strong>Legal obligation</strong> — where we must keep or disclose information to comply with the law.</li>
+          </ul>
+
+          <h2>7. Sharing and processors</h2>
+          <p>
+            We do not sell your personal data. We share it only with the service providers that keep the app and this website running, and only as far as needed:
+          </p>
+          <ul>
+            <li><strong>Google (Firebase)</strong> — provides Crashlytics and Analytics. Google acts as our data processor and handles crash reports and analytics events on our behalf. See the <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Firebase privacy information</a>.</li>
+            <li><strong>GitHub, Inc.</strong> — hosts this website. GitHub processes standard server logs for the site. See the <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub privacy statement</a>.</li>
+          </ul>
+          <p>
+            We may also disclose information where the law requires it, or where it is necessary to protect our rights, our users, or the public.
+          </p>
+
+          <h2>8. How long we keep information</h2>
+          <p>We keep information only as long as we need it for the purposes above:</p>
+          <ul>
+            <li>Crash reports and analytics events remain within Firebase no longer than the retention period configured there. Analytics event data is set to expire after at most 14 months.</li>
+            <li>Support emails are kept for up to 24 months, so we can follow up on the same issue.</li>
+          </ul>
+          <p>
+            Uninstalling the app stops any new data from being sent. Data that has already reached Firebase remains subject to the retention periods above, after which it is deleted or aggregated.
+          </p>
+
+          <h2>9. Your rights</h2>
+          <p>Depending on where you live, you may have the right to:</p>
+          <ul>
+            <li>access the personal data we hold about you;</li>
+            <li>have inaccurate data corrected;</li>
+            <li>have your data erased;</li>
+            <li>restrict or object to how we use your data;</li>
+            <li>receive your data in a portable format;</li>
+            <li>withdraw consent you gave earlier, without affecting processing that already took place;</li>
+            <li>complain to a supervisory authority.</li>
+          </ul>
+          <p>
+            In Türkiye, the supervisory authority is the Kişisel Verileri Koruma Kurumu (KVKK). In the EEA or the UK, you can complain to your local data protection authority.
+          </p>
+          <p>
+            If you are a California resident, you have the right to know what personal information we collect, the right to request its deletion, and the right to non-discrimination when you exercise those rights. We do not sell or share personal information as those terms are defined by the CCPA and CPRA.
+          </p>
+          <p>
+            To exercise any of these rights, email <a href="mailto:contact@pixmintgames.com">contact@pixmintgames.com</a>. We respond within 30 days. We may ask for enough detail to locate your records, and we will not ask for more than we need.
+          </p>
+
+          <h2>10. Data deletion requests</h2>
+          <p>
+            To ask us to delete data associated with your use of the app, email <a href="mailto:contact@pixmintgames.com">contact@pixmintgames.com</a> with the subject line <strong>Data deletion request</strong>.
+          </p>
+          <p>
+            Because there are no accounts, we cannot look you up by name. To find the relevant records, we may need the app version you were using and the approximate date and time of the crash or session you are asking about. We confirm what we deleted within 30 days.
+          </p>
+          <p>
+            Uninstalling the app clears all data stored on your device, including game progress. Data already sent to Firebase is covered by the retention periods in section 8.
+          </p>
+
+          <h2>11. Children's privacy</h2>
+          <p>
+            The app is not directed to children under 13, and we do not knowingly collect personal data from children under 13, or under 16 where local law sets that age. If you are a parent or guardian and believe that a child has provided us with data, email <a href="mailto:contact@pixmintgames.com">contact@pixmintgames.com</a> and we will delete it.
+          </p>
+
+          <h2>12. International transfers</h2>
+          <p>
+            Google may process data outside Türkiye and the EEA, for example in the United States, as part of providing Firebase. Where the law requires it, these transfers are covered by the European Commission's standard contractual clauses or another approved safeguard. You can ask us for more detail about the safeguards we rely on.
+          </p>
+
+          <h2>13. Security</h2>
+          <p>
+            Data sent from the app and from this website travels over HTTPS, so it is encrypted in transit. Access to crash reports and analytics is limited to the developer. The app does not store personal data on your device beyond your game progress and settings.
+          </p>
+          <p>
+            No system is perfectly secure, but we keep the data we hold to a minimum so that any problem would affect as little as possible.
+          </p>
+
+          <h2>14. This website</h2>
+          <p>
+            This website sets no cookies and loads no analytics, tracking scripts, or third-party widgets. The site contains no JavaScript at all.
+          </p>
+          <p>
+            The only third-party request the site makes is for Google Fonts, which serves the typefaces used on these pages. That request sends your IP address to Google. See the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google privacy policy</a>.
+          </p>
+          <p>
+            The site is hosted on GitHub Pages. GitHub records standard server logs — IP address, user agent, and timestamp — for security and operational purposes, under its privacy statement linked in section 7.
+          </p>
+
+          <h2>15. Changes to this policy</h2>
+          <p>
+            We may update this policy when the app or the law changes. If a change is material, we update the effective date at the top of this page. The current version always lives at <a href="https://pixmintgames.com/privacy.html">https://pixmintgames.com/privacy.html</a>.
+          </p>
+
+          <h2>16. Contact</h2>
+          <p>
+            <strong>PixMint Games</strong><br>
+            İstanbul, Türkiye<br>
+            <a href="mailto:contact@pixmintgames.com">contact@pixmintgames.com</a>
+          </p>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 PixMint Games. All rights reserved.</p>
+      <p class="footer-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="index.html#contact">Contact</a>
+        <a href="mailto:contact@pixmintgames.com">contact@pixmintgames.com</a>
+      </p>
+      <p class="legal-info">PixMint Games · İstanbul, Türkiye</p>
+    </div>
+  </footer>
+
+</body>
+</html>
