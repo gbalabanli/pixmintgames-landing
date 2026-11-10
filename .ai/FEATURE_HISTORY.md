@@ -5,6 +5,36 @@ not silently reverse.
 
 ---
 
+## 2026-11-10 — Contact mailbox live via Cloudflare Email Routing
+
+**Goal:** make `contact@pixmintgames.com` — published on every page and in the privacy policy —
+actually receive mail without paying for a hosted mailbox.
+
+### What shipped
+
+- Email Routing enabled on `pixmintgames.com`; Cloudflare added MX `route1/2/3.mx.cloudflare.net`,
+  SPF `v=spf1 include:_spf.mx.cloudflare.net ~all`, and the `cf2024-1._domainkey` DKIM record.
+- Destination `pixmintgames@gmail.com` verified 2026-11-10 18:50 UTC (account scope).
+- Rule `contact@pixmintgames.com` → forward → `pixmintgames@gmail.com`, enabled.
+- Confirmed on public DNS (1.1.1.1): three MX records plus the SPF TXT.
+
+### Decisions
+
+1. **Forwarding, not a hosted mailbox.** No new credentials, no IMAP client to maintain, and replies
+   leave from Gmail under the owner's own account.
+2. **Apex web records untouched.** The GitHub Pages A/AAAA set stays DNS-only; MX is independent of
+   the web host, so mail and site can be changed separately.
+3. **Account-scoped destinations vs zone-scoped rules.** The API refuses to create a rule until the
+   destination is verified (`2054`), so the owner has to click Cloudflare's verification mail first.
+
+### Deliberately not done
+
+- No catch-all, and no aliases for `privacy@` or `support@` (one extra rule each if wanted).
+- No DMARC record yet.
+- No end-to-end delivery test from an external mailbox at ship time.
+
+---
+
 ## 2026-11-10 — Second pass: palette v2, P3 overrides, legal identity, indexing off (REQ-14 … REQ-16)
 
 **Goal:** replace the first-pass palette, which read flat on the near-black background, with a hotter

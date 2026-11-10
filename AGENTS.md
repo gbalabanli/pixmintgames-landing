@@ -181,6 +181,25 @@ Cloudflare API work uses a scoped token supplied through the `CLOUDFLARE_API_TOK
 variable at runtime. Never write tokens, zone IDs paired with tokens, or account IDs into any file
 in this repo.
 
+## Email (Cloudflare Email Routing)
+
+`contact@pixmintgames.com` is not a mailbox — it forwards. Email Routing is enabled on the zone and
+the live path is `contact@pixmintgames.com` → `pixmintgames@gmail.com` (destination verified
+2026-11-10).
+
+- MX: `route1.mx.cloudflare.net`, `route2.mx.cloudflare.net`, `route3.mx.cloudflare.net`
+- SPF TXT: `v=spf1 include:_spf.mx.cloudflare.net ~all`
+- DKIM TXT: `cf2024-1._domainkey` (managed by Cloudflare)
+
+API shape matters here: **destination addresses are account-scoped**
+(`/accounts/{account_id}/email/routing/addresses`) while **forwarding rules are zone-scoped**
+(`/zones/{zone_id}/email/routing/rules`). A rule cannot be created until its destination is
+verified — the API answers `2054 Destination address is not verified`, and the owner has to click
+the Cloudflare verification mail sent to the destination inbox.
+
+Adding an alias such as `privacy@` is one extra rule in the same zone. Keep the site's `mailto:`
+links pointed at `contact@`.
+
 ## Indexing (pre-launch)
 
 Indexing is **deliberately disabled** until launch, on both crawler layers:

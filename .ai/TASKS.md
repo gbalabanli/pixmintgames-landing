@@ -110,9 +110,11 @@ Owner: project owner (Bora). Resolve before or shortly after launch.
       the `User-agent: *` / `Disallow: /` pair from `site/robots.txt`, and restore
       `Sitemap: https://pixmintgames.com/sitemap.xml`. All three edits together; see `AGENTS.md` →
       Indexing.
-- [ ] **Contact mailbox.** Confirm `contact@pixmintgames.com` actually receives mail. Consider
-      Cloudflare Email Routing (forward to a personal inbox) since the zone is already on Cloudflare,
-      then send a test message from an external account.
+- [x] **Contact mailbox — live 2026-11-10.** Cloudflare Email Routing enabled on `pixmintgames.com`
+      (MX `route1/2/3.mx.cloudflare.net`, SPF `include:_spf.mx.cloudflare.net`, DKIM
+      `cf2024-1._domainkey`), destination `pixmintgames@gmail.com` verified, rule
+      `contact@pixmintgames.com` → forward → `pixmintgames@gmail.com` enabled. Outstanding: one
+      end-to-end test message from an external account to confirm delivery.
 - [ ] **Play Store listing URL.** Once the first app is published, replace the non-link
       "Coming soon to Google Play" span in the Games card with the real listing URL (`target="_blank"`
       + `rel="noopener"`), and update the JSON-LD `sameAs` if applicable.
