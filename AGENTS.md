@@ -213,8 +213,8 @@ Run before declaring any site change done. Each item maps to a requirement in `r
       pre-launch).
 - [ ] All three pages still carry `noindex, nofollow` (robots + googlebot) and `robots.txt` is
       `User-agent: *` / `Disallow: /` while pre-launch.
-- [ ] Legal line matches across index/privacy/404: `PixMint Games · Bora Balabanli · Aydınevler
-      Mahallesi 32/3, 34854 İstanbul (Anadolu), Türkiye`.
+- [ ] Legal line matches across index/privacy/404: `Bora Balabanli · Aydınevler Mahallesi 32/3,
+      34854 İstanbul (Anadolu), Türkiye`.
 - [ ] `404.html` renders through the server and through the Pages artifact path.
 - [ ] Image dimensions: favicon 32x32, apple-touch 180x180, icon 512x512, OG 1200x630; each < 200 KB.
 - [ ] Contrast >= 4.5:1 for body text on ink/surface backgrounds.
