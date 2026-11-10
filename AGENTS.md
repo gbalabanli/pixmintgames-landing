@@ -15,7 +15,7 @@ preserved).
 - Alias domain: https://pixmint.games (redirect only, no content)
 - Repository: `gbalabanli/pixmintgames-landing` (public — required by GitHub Pages on the Free plan)
 - Deploy branch: `main`, Pages `build_type=workflow`, artifact = `site/` only
-- Release tracker: `reqs-manifest.md` (13 requirements, six waves). **Do not edit it.**
+- Release tracker: `reqs-manifest.md` (16 requirements, six waves + a second pass). **Do not edit it.**
 
 ## Stack
 
@@ -32,6 +32,14 @@ preserved).
 
 Do not introduce a framework, a build step, npm dependencies, or client-side JS. If a change seems
 to need one, raise it with the orchestrator first.
+
+Brand palette v2 lives as CSS custom properties in `site/assets/styles.css`: `--ink #0B0810`,
+`--surface #171221`, `--surface-subtle #110D18`, `--border #403A64`, `--brand #FF5E1A`
+(hsl 18 100% 55%), `--brand-hot #FFA733` (hsl 34 100% 60%), `--brand-deep #E62600`
+(hsl 10 100% 45%), `--accent #B370FF` (hsl 268 100% 72%, ambient glow only), `--cream #FFF7F2`,
+`--muted #B5ACC7`. The glow/fill tokens (`--glow-brand`, `--glow-hot`, `--brand-tint`) are
+`color-mix()` derivatives, and a `@media (color-gamut: p3)` block swaps in `color(display-p3 …)`
+values on wide-gamut displays. Change the palette in those token blocks, not in component rules.
 
 ## File layout
 
@@ -54,8 +62,8 @@ PixmintGamesLanding/
 │   ├── privacy.html              # privacy policy (Play Console URL)
 │   ├── 404.html                  # custom not-found page (served by Pages)
 │   ├── CNAME                     # pixmintgames.com
-│   ├── robots.txt                # allow all + sitemap pointer
-│   ├── sitemap.xml               # canonical URLs for / and /privacy.html
+│   ├── robots.txt                # blocks every crawler pre-launch; see Indexing
+│   ├── sitemap.xml               # canonical URLs; unreferenced while indexing is off
 │   ├── favicon.ico               # root copy so /favicon.ico resolves
 │   └── assets/
 │       ├── styles.css            # all styling, brand tokens as CSS custom properties
@@ -173,6 +181,24 @@ Cloudflare API work uses a scoped token supplied through the `CLOUDFLARE_API_TOK
 variable at runtime. Never write tokens, zone IDs paired with tokens, or account IDs into any file
 in this repo.
 
+## Indexing (pre-launch)
+
+Indexing is **deliberately disabled** until launch, on both crawler layers:
+
+- `site/robots.txt` serves `User-agent: *` / `Disallow: /`; its `Sitemap:` line is commented out.
+- `site/index.html`, `site/privacy.html`, and `site/404.html` each carry
+  `<meta name="robots" content="noindex, nofollow">` and the same `googlebot` meta.
+
+`site/sitemap.xml` is kept current but unreferenced, so it can be re-exposed at launch. The launch
+flip is exactly three edits, and they must land together:
+
+1. In `site/robots.txt`, remove the `User-agent: *` / `Disallow: /` pair.
+2. In `site/robots.txt`, restore `Sitemap: https://pixmintgames.com/sitemap.xml`.
+3. In all three pages, change both robots metas to `index, follow`.
+
+Do not flip one layer only: metas alone still leave the sitemap hidden, and `robots.txt` alone still
+leaves `noindex` in the HTML.
+
 ## Verification checklist
 
 Run before declaring any site change done. Each item maps to a requirement in `reqs-manifest.md`.
@@ -183,7 +209,12 @@ Run before declaring any site change done. Each item maps to a requirement in `r
 - [ ] Playwright screenshots at 1440px and 390px: no overflow, no overlap, header offset correct.
 - [ ] Console clean (no errors, no failed requests) and no requests to nonexistent files.
 - [ ] `site/CNAME` contains exactly `pixmintgames.com`.
-- [ ] `sitemap.xml` lists only canonical `https://pixmintgames.com/...` URLs.
+- [ ] `sitemap.xml` lists only canonical `https://pixmintgames.com/...` URLs (unreferenced while
+      pre-launch).
+- [ ] All three pages still carry `noindex, nofollow` (robots + googlebot) and `robots.txt` is
+      `User-agent: *` / `Disallow: /` while pre-launch.
+- [ ] Legal line matches across index/privacy/404: `PixMint Games · Bora Balabanli · Aydınevler
+      Mahallesi 32/3, 34854 İstanbul (Anadolu), Türkiye`.
 - [ ] `404.html` renders through the server and through the Pages artifact path.
 - [ ] Image dimensions: favicon 32x32, apple-touch 180x180, icon 512x512, OG 1200x630; each < 200 KB.
 - [ ] Contrast >= 4.5:1 for body text on ink/surface backgrounds.
@@ -215,6 +246,6 @@ Run before declaring any site change done. Each item maps to a requirement in `r
 ## Memory files
 
 - `.ai/ARCHITECTURE.md` — request/DNS flow, file responsibilities, deploy pipeline, asset provenance.
-- `.ai/TASKS.md` — the 13 release requirements grouped by wave, plus open items.
+- `.ai/TASKS.md` — the 16 release requirements grouped by wave and second pass, plus open items.
 - `.ai/FEATURE_HISTORY.md` — dated record of what shipped and why.
 - `.ai/LESSONS_LEARNED.md` — infrastructure pitfalls (DNS, redirects, caching, nested repos).

@@ -57,15 +57,19 @@ pixmint.games           ── proxied placeholder (192.0.2.1) → Single Redire
 | `site/privacy.html` | Standalone privacy policy used as the Play Console privacy URL. Covers Firebase Analytics (opt-in, off by default), Crashlytics (opt-out, on), no ad SDKs, no website cookies, retention, children, GDPR/CCPA, deletion contact. | Legal review only |
 | `site/404.html` | Branded not-found page with a link back to `/`. Served by Pages for unknown paths. | Rare |
 | `site/CNAME` | Exactly `pixmintgames.com`. Tells Pages which custom domain the artifact belongs to. | Never, unless the domain changes |
-| `site/robots.txt` | Allows all crawlers and points to the sitemap. | Rare |
-| `site/sitemap.xml` | Canonical `https://pixmintgames.com/` and `/privacy.html` entries only. Never list alias hosts or 404. | When pages are added/removed |
+| `site/robots.txt` | Blocks every crawler pre-launch: `User-agent: *` / `Disallow: /`, with the `Sitemap:` line commented out and a launch-flip comment. | Flip once at launch |
+| `site/sitemap.xml` | Canonical `https://pixmintgames.com/` and `/privacy.html` entries only. Never list alias hosts or 404. Kept current but unreferenced while indexing is off. | When pages are added/removed |
 | `site/assets/*.png`, `site/assets/favicon.ico` | Icons and OG card, all referenced from `<head>`; `site/favicon.ico` is a root copy so `/favicon.ico` resolves. | Asset refresh |
 | `site/assets/wordmark.svg` | Vector brand mark, referenced by `site/404.html` only (the landing header uses a text logo). | Asset refresh |
-| `site/assets/styles.css` | All layout and theming. Brand tokens are CSS custom properties on `:root`. Includes skip link, focus-visible rings, reduced-motion handling, and sticky-header scroll margin. | Design changes |
+| `site/assets/styles.css` | All layout and theming. Brand tokens are CSS custom properties on `:root`, with a `color-gamut: p3` override block and `color-mix()` glow tokens. Includes skip link, focus-visible rings, reduced-motion handling, and sticky-header scroll margin. | Design changes |
 | `.github/workflows/pages.yml` | CI: checkout → configure Pages → `upload-pages-artifact` with `path: site` → `deploy-pages`. Permissions `contents: read`, `pages: write`, `id-token: write`; concurrency group `pages` with cancel-in-progress. | Infra changes only |
 | `reqs-manifest.md` | Release tracker for the 13 requirements and waves. Owned by the orchestrator. | Orchestrator only |
 
 Everything outside `site/` is invisible to production. That includes `.ai/`, docs, and the workflow.
+
+**Indexing is disabled pre-launch:** all three pages carry `noindex, nofollow` metas (robots +
+googlebot) and `robots.txt` disallows every crawler; `sitemap.xml` is kept but unreferenced. Flip all
+three at launch — see `AGENTS.md` → Indexing.
 
 ## Content change lifecycle
 
@@ -99,13 +103,22 @@ Defined once in `site/assets/styles.css` as custom properties:
 
 | Token | Value | Role |
 | --- | --- | --- |
-| `--ink` | `#1E1B2E` | Page background |
-| `--orange` | `#F2541B` | Primary accent, CTAs (hover `#D8480F`) |
-| `--cream` | `#F4EEE9` | Primary text |
-| `--surface` | `#2A2540` | Cards, header, panels |
-| `--surface-subtle` | `#241F35` | Alternating section background |
-| `--border` | `#3A3450` | Hairlines and card borders |
-| `--muted` | `#A9A3BE` | Secondary text |
+| `--ink` | `#0B0810` | Page background |
+| `--surface` | `#171221` | Cards, header, panels |
+| `--surface-subtle` | `#110D18` | Alternating section background, footer |
+| `--border` | `#403A64` | Hairlines and card borders |
+| `--brand` | `#FF5E1A` (hsl 18 100% 55%) | Primary accent, CTAs |
+| `--brand-hot` | `#FFA733` (hsl 34 100% 60%) | Gradient highlight, link underline |
+| `--brand-deep` | `#E62600` (hsl 10 100% 45%) | Gradient depth, button hover border |
+| `--accent` | `#B370FF` (hsl 268 100% 72%) | Ambient radial glow only, never text |
+| `--cream` | `#FFF7F2` | Primary text |
+| `--muted` | `#B5ACC7` | Secondary text |
+
+Derived tokens: `--glow-brand`, `--glow-hot`, and `--brand-tint` are `color-mix()` expressions over
+the brand tokens, so every glow/fill follows a palette change. A `@media (color-gamut: p3)` block
+re-declares `--brand`, `--brand-hot`, `--brand-deep`, `--accent`, and `--cream` with
+`color(display-p3 …)` values for wide-gamut displays; the sRGB hex values above are the fallback.
+Body carries two ambient radial gradients (brand 10%, accent 9%).
 
 Typography: **Orbitron** 600/800/900 for display, **Plus Jakarta Sans** 400–700 for body, loaded from
 Google Fonts with `display=swap`. No self-hosted fonts, no font build step.

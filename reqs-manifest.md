@@ -66,6 +66,23 @@ Confirmed 2026-11-10. Verification method in brackets.
 - [x] REQ-13 — Enforce HTTPS after cert approval; full production matrix (http/https x apex/www x both
       domains) + TLS check + evidence report. [`https_enforced: true`, cert approved, statuses match]
 
+## Second pass (2026-11-10, approved)
+
+- [x] REQ-14 — Palette v2 in `site/assets/styles.css`: near-black ink `#0B0810`, surface `#171221`,
+      subtle `#110D18`, brand `hsl(18 100% 55%)` `#FF5E1A`, brand-hot `hsl(34 100% 60%)`,
+      brand-deep `hsl(10 100% 45%)`, accent `hsl(268 100% 72%)`, cream `#FFF7F2`, muted `#B5ACC7`;
+      `@media (color-gamut: p3)` overrides; all glows via `color-mix()`; ambient radial wash on body;
+      button/card/logo/h2/eyebrow/chips/focus glows; single Games card full width.
+      [contrast >= AA on every pair, Playwright 1440 + 390, no overflow]
+- [x] REQ-15 — Indexing off for every crawler: `noindex, nofollow` + `googlebot` meta on
+      `index.html`, `privacy.html`, `404.html`; `robots.txt` `User-agent: * / Disallow: /` with the
+      launch-flip comment; sitemap kept but unreferenced. [meta present on all 3 pages, robots body
+      exact, sitemap file intact]
+- [x] REQ-16 — Legal identity: `Bora Balabanli, operating as PixMint Games` +
+      `Aydınevler Mahallesi 32/3, 34854 İstanbul (Anadolu), Türkiye` in index footer + contact card,
+      privacy §1 and §16, and JSON-LD (`legalName`, full `PostalAddress`).
+      [all 5 locations updated, no placeholder text]
+
 ## DAG
 
 ```
@@ -97,5 +114,9 @@ wave 6  REQ-13                                              (needs REQ-10..12 gr
 | 2026-11-10 | REQ-12 | `pixmint.games` and `www.pixmint.games` -> single 301 to apex; `https://pixmint.games/some/path?x=1&y=2` -> `https://pixmintgames.com/some/path?x=1&y=2` (1 hop) |
 | 2026-11-10 | REQ-13 | cert approved (domains `pixmintgames.com`, expires 2027-02-08); `https_enforced: true`; http apex -> 301 https; `ssl_verify=0` on every production URL; custom 404 served (2,890 B) |
 
+| 2026-11-10 | REQ-14 | tokens live (`--brand #FF5E1A`, `--ink #0B0810`, `--border #403A64`); contrast 6.50 brand/ink, 6.00 brand/surface, 8.46 muted/surface, 18.78 cream/ink; `@media (color-gamut: p3)` block parsed; glows render as `color-mix()` shadows; card 912px wide at 1440, 327px at 390; 0 console messages; no overflow |
+| 2026-11-10 | REQ-15 | `noindex, nofollow` + `googlebot` on all 3 pages (verified locally and on production); `robots.txt` serves the `Disallow: /` block with the launch-flip comment; `sitemap.xml` intact and unreferenced |
+| 2026-11-10 | REQ-16 | legal line identical on index/privacy/404 (`Bora Balabanli · Aydınevler Mahallesi 32/3, 34854 İstanbul (Anadolu), Türkiye`); contact card has `Developer:`; privacy §1 + §16 name the controller; JSON-LD carries `legalName` + full `PostalAddress` |
 Production screenshots: `%TEMP%\opencode\pixmint-proof\prod-index-1440.png`, `prod-index-390.png`,
-`prod-404-390.png`. Release run: `https://github.com/gbalabanli/pixmintgames-landing/actions`.
+`prod-404-390.png`. Palette-v2 screenshots: `v2-index-1440.png`, `v2-index-390.png`,
+`v2-privacy-1440.png`, `v2-404-1440.png`, `live-index-1440.png`, `live-index-390.png`. Release run: `https://github.com/gbalabanli/pixmintgames-landing/actions`.

@@ -1,7 +1,8 @@
 # Tasks — PixMint Games landing release
 
-Source of truth for scope: `reqs-manifest.md` (13 requirements, six waves). This file mirrors that
-tracker with acceptance criteria and status. Update checkboxes as work lands; never edit the manifest.
+Source of truth for scope: `reqs-manifest.md` (16 requirements, six waves plus a second pass). This
+file mirrors that tracker with acceptance criteria and status. Update checkboxes as work lands; never
+edit the manifest.
 
 Legend: `[ ]` not started · `[/]` in progress · `[x]` done and verified.
 
@@ -73,6 +74,25 @@ Legend: `[ ]` not started · `[/]` in progress · `[x]` done and verified.
       matrix (http/https x apex/www x both domains) + TLS check and capture evidence.
       *Done when:* `https_enforced: true`, certificate approved, all status codes match expectations.
 
+## Second pass — visual + legal + indexing (2026-11-10)
+
+- [x] **REQ-14 — Palette v2.** `site/assets/styles.css`: near-black ink `#0B0810`, surface
+      `#171221`, subtle `#110D18`, border `#403A64`, brand `#FF5E1A` (hsl 18 100% 55%), brand-hot
+      `#FFA733` (hsl 34 100% 60%), brand-deep `#E62600` (hsl 10 100% 45%), accent `#B370FF`
+      (ambient glow only), cream `#FFF7F2`, muted `#B5ACC7`; `@media (color-gamut: p3)` overrides;
+      `color-mix()` glow tokens; body ambient radial wash; single Games card full width; disabled
+      CTA keeps its label colour.
+      *Done when:* contrast >= AA on every text pair, Playwright 1440 + 390, no overflow.
+- [x] **REQ-15 — Indexing off.** `noindex, nofollow` + `googlebot` metas on `index.html`,
+      `privacy.html`, and `404.html`; `robots.txt` `User-agent: *` / `Disallow: /` with the
+      launch-flip comment; sitemap kept but unreferenced.
+      *Done when:* metas present on all three pages, robots body exact, sitemap file intact.
+- [x] **REQ-16 — Legal identity.** `Bora Balabanli, operating as PixMint Games` +
+      `Aydınevler Mahallesi 32/3, 34854 İstanbul (Anadolu), Türkiye` in the index footer + contact
+      card, privacy §1 and §16, the privacy/404 footers, and JSON-LD (`legalName` + full
+      `PostalAddress`).
+      *Done when:* all locations updated, no placeholder text.
+
 ---
 
 ## Open items (TODO)
@@ -81,10 +101,15 @@ Owner: project owner (Bora). Resolve before or shortly after launch.
 
 - [x] **REQ-09..13 pending:** local Playwright acceptance, GitHub repo + Pages, Cloudflare DNS/redirects,
       HTTPS enforcement.
-- [ ] **Legal entity details.** Supply the exact registered company name from the vergi levhası and
-      the registered address. Apply to the site footer (currently `PixMint Games · İstanbul, Türkiye`)
-      and to the data-controller block in `site/privacy.html`. No bracket placeholders may ship in
-      the meantime.
+- [x] **Legal entity details — shipped 2026-11-10.** Registered identity recorded as
+      `Bora Balabanli, operating as PixMint Games`, `Aydınevler Mahallesi 32/3, 34854 İstanbul
+      (Anadolu), Türkiye`. Applied to the index footer + contact card (`Developer:` line), privacy
+      §1 (controller) and §16 (contact block), the privacy/404 footers, and the index JSON-LD
+      (`legalName` + `PostalAddress`).
+- [ ] **Enable indexing at launch.** Flip the three pages' robots metas to `index, follow`, remove
+      the `User-agent: *` / `Disallow: /` pair from `site/robots.txt`, and restore
+      `Sitemap: https://pixmintgames.com/sitemap.xml`. All three edits together; see `AGENTS.md` →
+      Indexing.
 - [ ] **Contact mailbox.** Confirm `contact@pixmintgames.com` actually receives mail. Consider
       Cloudflare Email Routing (forward to a personal inbox) since the zone is already on Cloudflare,
       then send a test message from an external account.

@@ -5,6 +5,64 @@ not silently reverse.
 
 ---
 
+## 2026-11-10 — Second pass: palette v2, P3 overrides, legal identity, indexing off (REQ-14 … REQ-16)
+
+**Goal:** replace the first-pass palette, which read flat on the near-black background, with a hotter
+orange/ink system; let the lone game card use the full content width; state the legal identity on
+every page; and keep the pre-launch site out of every search index. Shipped 2026-11-10.
+
+### What shipped
+
+- **Palette v2** in `site/assets/styles.css`: `--ink #0B0810`, `--surface #171221`,
+  `--surface-subtle #110D18`, `--border #403A64`, `--brand #FF5E1A` (hsl 18 100% 55%),
+  `--brand-hot #FFA733` (hsl 34 100% 60%), `--brand-deep #E62600` (hsl 10 100% 45%),
+  `--accent #B370FF` (hsl 268 100% 72%, ambient glow only), `--cream #FFF7F2`,
+  `--muted #B5ACC7`.
+- **Display-P3 override:** a `@media (color-gamut: p3)` block re-declares brand, brand-hot,
+  brand-deep, accent, and cream with `color(display-p3 …)` values, so wide-gamut screens get the
+  same hues at higher chroma. sRGB hex values remain the fallback.
+- **Glow system:** `--glow-brand`, `--glow-hot`, and `--brand-tint` are `color-mix()` derivatives of
+  the brand tokens, used on the logo (drop-shadow), buttons, cards, chips, focus rings, h2s, and the
+  body's two ambient radial washes (brand 10%, accent 9%).
+- **Full-width single card:** `.grid:has(> .card:only-child)` collapses to one column and the lone
+  card drops its 680px cap; `.card > p` and `.card .card-lead` cap copy at 62ch so the wider card
+  stays readable.
+- **Disabled-CTA fix:** the "Coming soon to Google Play" pill is a `.btn-disabled` span, not a dead
+  link — surface fill, muted label, no hover lift or glow. Explicit `.card .btn` /
+  `.card .btn-disabled` rules restore the label colour that `.card a` had been overriding.
+- **Legal identity:** `Bora Balabanli, operating as PixMint Games` +
+  `Aydınevler Mahallesi 32/3, 34854 İstanbul (Anadolu), Türkiye` now appears in the index footer,
+  the index contact card (`Developer:` line), privacy §1 (controller) and §16 (contact block), the
+  privacy/404 footers, and the index JSON-LD (`legalName` + full `PostalAddress`).
+- **Indexing off:** all three pages carry `noindex, nofollow` robots + googlebot metas; `robots.txt`
+  is `User-agent: *` / `Disallow: /` with the launch-flip comment; `sitemap.xml` is kept but its
+  `Sitemap:` reference is commented out.
+
+### Decisions
+
+1. **Palette v2 replaces v1 rather than layering a second theme.** The v1 orange on the v1 ink
+   measured 4.84:1 — technically AA but visually flat, with little separation between surface and
+   page. The v2 ink is darker and the brand hotter; the brand now measures 6.50:1 on `--ink`,
+   6.00:1 on `--surface`, and 6.27:1 on `--surface-subtle`, so it can carry text.
+2. **P3 is an enhancement, not a requirement.** The sRGB values stay authoritative for every
+   display; the `color-gamut: p3` block only upgrades capable devices, and every glow resolves
+   through the tokens so the override propagates.
+3. **Accent purple is ambient only.** `--accent` never carries text or a control state; it exists
+   solely for the body's second radial wash, which keeps the near-black background from going dead.
+4. **One card fills the row.** With a single game, `auto-fit` left an empty column and a 680px card
+   stranded in a wide container. The `:has(:only-child)` rule is conditional, so adding a second
+   card restores the normal grid with no further CSS.
+5. **Indexing is off on both layers.** `robots.txt` alone does not stop indexing of already-known
+   URLs, and metas alone do not stop crawling, so both are set. The site is live but intentionally
+   unlisted until launch; the flip is documented in `AGENTS.md` → Indexing.
+
+### Deliberately not done
+
+- No change to copy, nav, page structure, fonts, or the zero-JS/zero-build constraints.
+- No new games, no Play Store URL, no social links, no analytics, no cookie banner.
+- No HSTS, no Cloudflare proxy on the apex, no Email Routing.
+- `sitemap.xml` is not deleted — it stays valid and is re-referenced at the launch flip.
+
 ## 2026-11-10 — Initial public site: workspace docs + landing release (REQ-01)
 
 **Goal:** put the studio's existing one-page landing online at `https://pixmintgames.com` on GitHub

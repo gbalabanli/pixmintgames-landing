@@ -157,3 +157,32 @@ green.
 
 **Rule:** treat `gh run list --workflow pages.yml` plus a live `curl` as the real deployment check.
 Do not block a release on `status: built`.
+
+## 12. Gradient-clipped text ignores `text-shadow`
+
+**Symptom:** the `.logo` uses `background-clip: text` with `-webkit-text-fill-color: transparent`.
+Adding `text-shadow` for a glow either does nothing or paints a solid halo that swallows the
+gradient; a child `<span>` inside the logo also disappears or keeps the parent's transparency.
+
+**Cause:** `text-shadow` is derived from the text's glyph colour, which is transparent once the
+background is clipped to the text — it does not read the background gradient. Child spans inherit
+`-webkit-text-fill-color: transparent` unless it is reset.
+
+**Rule:** glow gradient-clipped text with `filter: drop-shadow(0 0 14px var(--glow-brand))`; it
+follows the painted glyph shape. Reset both `color` and `-webkit-text-fill-color` on child spans that
+must render normally (`.logo span` uses `-webkit-text-fill-color: var(--muted)`). Never stack
+`text-shadow` on `background-clip: text`.
+
+## 13. `.card a` outranks `.btn` and repaints button labels
+
+**Symptom:** a link styled as a button inside a card renders brand-coloured text on a brand-coloured
+fill — an unreadable label — even though the `.btn` block sets `color: var(--ink)`.
+
+**Cause:** `.card a` has specificity (0,1,1); `.btn` has (0,1,0). The descendant selector wins
+regardless of source order, so the card's link colour overrides the button's label colour.
+
+**Rule:** scope button rules to the card context with equal-or-higher specificity:
+`.card .btn { color: var(--ink); text-decoration: none; }` and
+`.card .btn-disabled { color: var(--muted); }` (repeat for `.contact-card` and `.policy-box` if they
+share the link rule). When a label colour looks wrong, inspect the computed style and the competing
+selectors — not just the `.btn` block.
