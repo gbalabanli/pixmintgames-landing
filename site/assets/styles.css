@@ -19,22 +19,42 @@
 :root {
   color-scheme: dark;
 
-  /* Brand palette */
-  --ink: #1E1B2E;
-  --surface: #2A2540;
-  --surface-subtle: #241F35;
-  --border: #3A3450;
-  --brand: #F2541B;
-  --brand-hover: #D8480F;
-  --brand-glow: rgba(242, 84, 27, 0.25);
-  --cream: #F4EEE9;
-  --muted: #A9A3BE;
+  /* Brand palette — sRGB fallbacks. The P3 override below swaps in the same
+     hues at higher chroma on wide-gamut displays. */
+  --ink: #0B0810;
+  --surface: #171221;
+  --surface-subtle: #110D18;
+  --border: #403A64;
+  --brand: #FF5E1A;            /* hsl(18 100% 55%) */
+  --brand-hot: #FFA733;        /* hsl(34 100% 60%) */
+  --brand-deep: #E62600;       /* hsl(10 100% 45%) */
+  --accent: #B370FF;           /* hsl(268 100% 72%) — ambient glow only */
+  --cream: #FFF7F2;
+  --muted: #B5ACC7;
+
+  /* Derived glows/fills — always resolve through the tokens so the P3
+     override propagates. */
+  --glow-brand: color-mix(in srgb, var(--brand) 55%, transparent);
+  --glow-hot: color-mix(in srgb, var(--brand-hot) 45%, transparent);
+  --brand-tint: color-mix(in srgb, var(--brand) 12%, transparent);
 
   --radius: 8px;
   --radius-lg: 12px;
 
   --font-display: 'Orbitron', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Wide-gamut screens get the same hues with more chroma. Values are the
+   computed sRGB -> Display-P3 conversions of the tokens above. */
+@media (color-gamut: p3) {
+  :root {
+    --brand: color(display-p3 0.927 0.412 0.205);
+    --brand-hot: color(display-p3 0.951 0.670 0.304);
+    --brand-deep: color(display-p3 0.829 0.235 0.128);
+    --accent: color(display-p3 0.665 0.451 0.968);
+    --cream: color(display-p3 0.995 0.970 0.951);
+  }
 }
 
 *,
@@ -52,6 +72,10 @@ html {
 body {
   font-family: var(--font-body);
   background-color: var(--ink);
+  background-image:
+    radial-gradient(900px 460px at 50% -8%, color-mix(in srgb, var(--brand) 10%, transparent), transparent 70%),
+    radial-gradient(720px 420px at 88% 4%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 70%);
+  background-repeat: no-repeat;
   color: var(--cream);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -66,9 +90,9 @@ section[id],
 
 /* --------------------------------------------------------------------------
    Links
-   --brand on --ink = 4.84:1, on --surface-subtle = 4.58:1.
-   Inside surface cards the brand orange drops to 4.22:1, so those links use
-   --cream (12.7:1) with an orange underline for brand identity.
+   --brand on --ink = 6.50:1, on --surface = 6.00:1,
+   on --surface-subtle = 6.27:1. All pass AA, so the brand orange is used
+   everywhere, including inside surface cards.
    -------------------------------------------------------------------------- */
 a {
   color: var(--brand);
@@ -85,9 +109,9 @@ a:hover {
 .card a,
 .contact-card a,
 .policy-box a {
-  color: var(--cream);
+  color: var(--brand);
   text-decoration: underline;
-  text-decoration-color: var(--brand);
+  text-decoration-color: color-mix(in srgb, var(--brand) 55%, transparent);
   text-underline-offset: 3px;
 }
 
@@ -95,7 +119,7 @@ a:hover {
 .contact-card a:hover,
 .policy-box a:hover {
   color: var(--cream);
-  text-decoration-color: var(--brand-hover);
+  text-decoration-color: var(--brand-hot);
   text-decoration-thickness: 2px;
 }
 
@@ -110,6 +134,7 @@ a:hover {
   outline: 2px solid var(--brand);
   outline-offset: 3px;
   border-radius: 4px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 28%, transparent);
 }
 
 /* --------------------------------------------------------------------------
@@ -173,7 +198,7 @@ header {
   z-index: 100;
   padding: 14px 0;
   border-bottom: 1px solid var(--border);
-  background: rgba(30, 27, 46, 0.88);
+  background: color-mix(in srgb, var(--ink) 78%, transparent);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 }
@@ -192,8 +217,11 @@ header {
   font-weight: 900;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: var(--brand);
-  text-shadow: 0 0 16px var(--brand-glow);
+  background: linear-gradient(180deg, var(--brand-hot), var(--brand));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 14px var(--glow-brand));
   white-space: nowrap;
 }
 
@@ -202,6 +230,7 @@ header {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--muted);
+  -webkit-text-fill-color: var(--muted);
 }
 
 .nav-links {
@@ -226,7 +255,7 @@ header {
 
 .nav-links a:hover {
   color: var(--cream);
-  background-color: rgba(244, 238, 233, 0.06);
+  background-color: color-mix(in srgb, var(--cream) 7%, transparent);
   text-decoration: none;
 }
 
@@ -253,7 +282,8 @@ h2::before {
   width: 4px;
   height: 1.2em;
   border-radius: 2px;
-  background-color: var(--brand);
+  background: linear-gradient(180deg, var(--brand-hot), var(--brand-deep));
+  box-shadow: 0 0 14px var(--glow-brand);
 }
 
 .section-lead {
@@ -268,9 +298,10 @@ h2::before {
   align-self: flex-start;
   min-height: 28px;
   padding: 4px 12px;
-  border: 1px solid rgba(242, 84, 27, 0.38);
+  border: 1px solid color-mix(in srgb, var(--brand) 45%, transparent);
   border-radius: 999px;
-  background-color: rgba(242, 84, 27, 0.12);
+  background-color: var(--brand-tint);
+  box-shadow: 0 0 18px -6px var(--glow-brand);
   color: var(--cream);
   font-family: var(--font-display);
   font-size: 0.7rem;
@@ -289,9 +320,12 @@ h2::before {
 .notice {
   padding: 16px 18px;
   border: 1px solid var(--border);
-  border-left: 4px solid var(--brand);
   border-radius: var(--radius);
-  background-color: rgba(242, 84, 27, 0.08);
+  background-color: color-mix(in srgb, var(--brand) 9%, transparent);
+  background-image: linear-gradient(180deg, var(--brand-hot), var(--brand-deep));
+  background-size: 4px 100%;
+  background-position: left top;
+  background-repeat: no-repeat;
   color: var(--cream);
   font-size: 0.925rem;
   line-height: 1.65;
@@ -320,7 +354,7 @@ h2::before {
   line-height: 1.25;
   letter-spacing: -0.5px;
   color: var(--cream);
-  background: linear-gradient(180deg, #F4EEE9 0%, #D2CADE 100%);
+  background: linear-gradient(180deg, #FFF7F2 0%, #FFD9BF 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -335,9 +369,8 @@ h2::before {
 
 /* --------------------------------------------------------------------------
    Buttons
-   --ink on --brand = 4.84:1 (AA for normal text).
-   --brand-hover is used for the hover border/glow only: cream or ink text on
-   it would fall below 4.5:1.
+   --ink on --brand = 6.50:1 (AA for normal text). The glow tokens are
+   decorative only and never carry text.
    -------------------------------------------------------------------------- */
 .btn {
   display: inline-flex;
@@ -355,32 +388,64 @@ h2::before {
   letter-spacing: 1px;
   text-transform: uppercase;
   text-align: center;
-  box-shadow: 0 4px 20px var(--brand-glow);
+  box-shadow: 0 0 0 1px var(--glow-hot), 0 8px 24px -8px var(--glow-brand);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .btn:hover {
-  border-color: var(--brand-hover);
+  border-color: var(--brand-deep);
   color: var(--ink);
   text-decoration: none;
   transform: translateY(-2px);
-  box-shadow: 0 6px 26px rgba(242, 84, 27, 0.4);
+  box-shadow: 0 0 0 1px var(--glow-hot), 0 12px 34px -10px var(--glow-brand), 0 0 44px -12px var(--glow-hot);
 }
 
 .btn:active {
   transform: translateY(0);
 }
 
-/* Unavailable action: button-shaped but clearly inactive */
-.btn-disabled,
+/* Unavailable action: button-shaped but clearly inactive.
+   --surface fill + a faint brand hairline keeps the pill visible on --ink
+   (--surface is #171221 vs --ink #0B0810), while --muted on --surface is
+   8.46:1 so the label stays readable. */
+.btn-disabled {
+  border: 1px solid color-mix(in srgb, var(--brand) 28%, transparent);
+  background-color: var(--surface);
+  color: var(--muted);
+  cursor: default;
+  box-shadow: none;
+}
+
+/* No hover lift, glow, or colour change: it is not a live control. */
 .btn-disabled:hover,
 .btn-disabled:active {
-  border-color: var(--border);
-  background-color: var(--surface-subtle);
+  border-color: color-mix(in srgb, var(--brand) 28%, transparent);
+  background-color: var(--surface);
   color: var(--muted);
   cursor: default;
   transform: none;
   box-shadow: none;
+}
+
+/* The surface-card link rule above outranks .btn, which would paint a button
+   label brand-on-brand. Buttons keep ink text; disabled ones stay muted. */
+.card .btn,
+.contact-card .btn,
+.policy-box .btn,
+.card .btn:hover,
+.contact-card .btn:hover,
+.policy-box .btn:hover {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.card .btn-disabled,
+.contact-card .btn-disabled,
+.policy-box .btn-disabled,
+.card .btn-disabled:hover,
+.contact-card .btn-disabled:hover,
+.policy-box .btn-disabled:hover {
+  color: var(--muted);
 }
 
 /* --------------------------------------------------------------------------
@@ -393,6 +458,16 @@ h2::before {
   margin-top: 24px;
 }
 
+/* A lone card should not leave an empty auto-fit column beside it. */
+.grid:has(> .card:only-child) {
+  grid-template-columns: 1fr;
+}
+
+/* ...and that lone card should fill the row instead of stopping at 680px. */
+.grid:has(> .card:only-child) > .card {
+  max-width: none;
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -402,11 +477,12 @@ h2::before {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background-color: var(--surface);
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
-  border-color: rgba(244, 238, 233, 0.22);
+  border-color: color-mix(in srgb, var(--brand) 55%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand) 25%, transparent), 0 20px 50px -26px var(--glow-brand);
 }
 
 .card h3 {
@@ -421,6 +497,12 @@ h2::before {
 .card p {
   font-size: 0.95rem;
   color: var(--muted);
+}
+
+/* A full-width single card must not stretch its copy into 900px lines. */
+.card > p,
+.card .card-lead {
+  max-width: 62ch;
 }
 
 .card .card-lead {
@@ -450,13 +532,19 @@ h2::before {
 
 .chips li {
   padding: 6px 12px;
-  border: 1px solid var(--border);
+  border: 1px solid color-mix(in srgb, var(--brand) 30%, transparent);
   border-radius: 999px;
   background-color: var(--surface-subtle);
   color: var(--muted);
   font-size: 0.8rem;
   font-weight: 500;
   line-height: 1.4;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chips li:hover {
+  border-color: color-mix(in srgb, var(--brand) 60%, transparent);
+  box-shadow: 0 0 16px -4px var(--glow-brand);
 }
 
 .card-cta {
@@ -629,11 +717,17 @@ footer {
   }
 }
 
-/* Keep gradient text readable in forced-colors / high-contrast modes */
+/* Keep gradient/clipped text readable in forced-colors / high-contrast modes */
 @media (forced-colors: active) {
-  .hero h1 {
+  .hero h1,
+  .logo {
     background: none;
     color: CanvasText;
+    -webkit-text-fill-color: currentColor;
+    filter: none;
+  }
+
+  .logo span {
     -webkit-text-fill-color: currentColor;
   }
 }

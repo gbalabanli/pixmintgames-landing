@@ -1,4 +1,12 @@
+# Indexing is intentionally DISABLED (pre-launch).
+# Every crawler is blocked, and the pages additionally carry
+# <meta name="robots" content="noindex, nofollow">.
+#
+# To launch: delete the "User-agent / Disallow" pair below, restore the
+# "Sitemap:" line, and switch the robots metas in the three pages to
+# "index, follow".
 User-agent: *
-Allow: /
+Disallow: /
 
-Sitemap: https://pixmintgames.com/sitemap.xml
+# Sitemap intentionally omitted while indexing is blocked:
+# Sitemap: https://pixmintgames.com/sitemap.xml
