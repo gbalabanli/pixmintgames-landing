@@ -82,6 +82,36 @@ done by this entry.
 - No exact legal entity name/registered address yet; the footer uses the approved fallback
   `PixMint Games · İstanbul, Türkiye` rather than shipping a bracket placeholder.
 
+## 2026-11-10 — Release shipped: repo, Pages, DNS, HTTPS (REQ-10 … REQ-13)
+
+**Goal:** put the finished site on the real domain and retire the alias zone.
+
+**What shipped**
+- Public repo `gbalabanli/pixmintgames-landing`, first commit `5b1b3f3`, workflow run
+  `42847144949` green; Pages `build_type=workflow`, custom domain `pixmintgames.com`.
+- Cloudflare `pixmintgames.com`: apex 4×A (`185.199.108.153`–`185.199.111.153`) + 4×AAAA
+  (`2606:50c0:8000::153`–`8003::153`) **DNS-only**; `www` proxied placeholder `192.0.2.1` +
+  Single Redirect → apex.
+- Cloudflare `pixmint.games`: apex + `www` proxied placeholders, one 301 rule →
+  `https://pixmintgames.com` with path and query preserved.
+- Both zones: SSL mode Full (strict), Always Use HTTPS on. Pages certificate approved
+  (expires 2027-02-08), `https_enforced: true`.
+- Production matrix (13 URLs) all as designed: http apex 301 → https, https apex 200,
+  `www` 301, alias zone 301 with `/some/path?x=1&y=2` preserved, custom 404 served at 2,890 B.
+
+**Decisions**
+1. **Apex stays DNS-only.** Cloudflare proxying would break GitHub's HTTP-01 issuance; GitHub's
+   CDN already provides edge caching, so the proxy buys nothing for the canonical host.
+2. **Redirect-only zones use a proxied `192.0.2.1` placeholder.** Redirect rules only fire on
+   proxied traffic, and there is no origin to point at.
+3. **Enforce HTTPS was set through the API, then a rebuild was forced.** The flag alone did not
+   change edge behaviour; see LESSONS_LEARNED §8.
+4. **Commit identity is repo-local** (`gbalabanli <gbalabanli@users.noreply.github.com>`); no global
+   git config was touched.
+
+**Deliberately not done:** no Cloudflare proxy on the apex, no HSTS, no Email Routing, no analytics
+on the site, no legal-entity line beyond `PixMint Games · İstanbul, Türkiye` (owner TODO).
+
 ---
 
 New entries go directly above this line, newest first, in the same shape: title with date and REQ

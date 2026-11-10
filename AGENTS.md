@@ -6,14 +6,14 @@ four memory files under `.ai/`.
 ## What this project is
 
 A static marketing + legal site for **PixMint Games**, an independent mobile game studio.
-It contains one landing page, one privacy policy page, and a custom 404 page. The site is built to be
-published on GitHub Pages at **https://pixmintgames.com** once the repository is created and DNS is
-pointed at it. `pixmint.games` and `www.pixmint.games` will be 301-redirected at Cloudflare to the
-canonical `.com` host (path and query preserved).
+It contains one landing page, one privacy policy page, and a custom 404 page. It is live on GitHub
+Pages at **https://pixmintgames.com** (deployed 2026-11-10). `pixmint.games` and
+`www.pixmint.games` are 301-redirected at Cloudflare to the canonical `.com` host (path and query
+preserved).
 
 - Canonical URL: https://pixmintgames.com
 - Alias domain: https://pixmint.games (redirect only, no content)
-- Repository: `gbalabanli/pixmintgames-landing` (not created yet; must be public — GitHub Pages on the Free plan requires it)
+- Repository: `gbalabanli/pixmintgames-landing` (public — required by GitHub Pages on the Free plan)
 - Deploy branch: `main`, Pages `build_type=workflow`, artifact = `site/` only
 - Release tracker: `reqs-manifest.md` (13 requirements, six waves). **Do not edit it.**
 
@@ -107,9 +107,9 @@ Do not use real Chrome profiles for this site.
 
 ## Deploy
 
-Deployment is GitHub Actions only. Nothing is committed or pushed yet. After the first push, a
-push to `main` that touches `site/`, `.github/workflows/`, or the CNAME will trigger
-`.github/workflows/pages.yml`, which uploads `site/` as the Pages artifact and publishes it.
+Deployment is GitHub Actions only. A push to `main` that touches `site/`, `.github/workflows/`, or
+the CNAME triggers `.github/workflows/pages.yml`, which uploads `site/` as the Pages artifact and
+publishes it.
 
 ```powershell
 # One-time: create the public repo, set the remote, push main
@@ -188,7 +188,9 @@ Run before declaring any site change done. Each item maps to a requirement in `r
 - [ ] Image dimensions: favicon 32x32, apple-touch 180x180, icon 512x512, OG 1200x630; each < 200 KB.
 - [ ] Contrast >= 4.5:1 for body text on ink/surface backgrounds.
 - [ ] `pages.yml` uploads only `site/` and uses `pages: write` + `id-token: write`.
-- [ ] After deploy: `gh api .../pages` shows `status: built` and the correct `cname`.
+- [ ] After deploy: `gh run list --workflow pages.yml` shows a green run and the live `curl` matches
+      the intended commit (the Pages API returns `status: null` for workflow builds — see
+      `.ai/LESSONS_LEARNED.md` §11).
 - [ ] `curl -sI https://pixmintgames.com/` returns `200`; `www` and `pixmint.games` return one `301`.
 - [ ] `https_enforced: true` only after the certificate is approved (REQ-13).
 

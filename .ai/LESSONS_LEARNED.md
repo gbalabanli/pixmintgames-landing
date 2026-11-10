@@ -109,3 +109,51 @@ leave production unchanged. GitHub Pages also caches aggressively at the CDN.
 **Rule:** after pushing, check `gh run list --workflow pages.yml --limit 3` and
 `gh api repos/gbalabanli/pixmintgames-landing/pages` for `status: built` before judging production.
 When verifying, use a cache-busted URL. Confirm the deployed commit matches the intended one.
+
+---
+
+## 8. GitHub "Enforce HTTPS" reports true before the edge redirects
+
+**Symptom:** `gh api .../pages` returns `https_enforced: true` and the certificate is `approved`,
+but `http://pixmintgames.com/` still answers `200 OK` from GitHub's Fastly edge — including for a
+cache-busting query string.
+
+**Cause:** the flag is stored immediately, but the http→https redirect only appears after the Pages
+site is rebuilt and the edge configuration refreshes. CDN-cached 200s can also mask the change.
+
+**Rule:** set `https_enforced`, then force a build (`gh workflow run pages.yml --ref main`), wait for
+the run to finish, and re-test with a unique query string (`?cb=<random>`). Only then judge the
+result. Expect minutes, not seconds.
+
+## 9. Account-owned Cloudflare tokens fail `/user/tokens/verify`
+
+**Symptom:** `GET /client/v4/user/tokens/verify` returns `{"success":false,"errors":[{"code":1000,
+"message":"Invalid API Token"}]}` even though the same token can read and write zones.
+
+**Cause:** that endpoint validates *user*-owned tokens only; account-owned tokens are not visible
+there.
+
+**Rule:** verify with `GET /client/v4/zones` (or any zone-scoped call) instead. A successful zone
+list proves the token and its permissions; the verify endpoint is not authoritative here.
+
+## 10. Redirect-only Cloudflare zones need proxied placeholder records
+
+**Symptom:** a Single Redirect rule on a zone with no DNS records never fires — the hostname does
+not even resolve.
+
+**Cause:** redirect rules are evaluated at the edge, so the request must reach Cloudflare first,
+which requires a **proxied** (orange-cloud) record. It does not need a real origin.
+
+**Rule:** create a proxied `A` record to `192.0.2.1` for every hostname the redirect covers, then
+add the rule. Never proxy the canonical apex that GitHub Pages terminates TLS for.
+
+## 11. Pages API `status` is `null` for workflow builds
+
+**Symptom:** `gh api .../pages` shows `status: null` while the site is live and the workflow run is
+green.
+
+**Cause:** the `status` field describes the legacy branch-build pipeline; with
+`build_type=workflow` it is not populated.
+
+**Rule:** treat `gh run list --workflow pages.yml` plus a live `curl` as the real deployment check.
+Do not block a release on `status: built`.

@@ -34,36 +34,36 @@ Confirmed 2026-11-10. Verification method in brackets.
 
 ## Requirements
 
-- [ ] REQ-01 — `AGENTS.md` + `.ai/{ARCHITECTURE,TASKS,FEATURE_HISTORY,LESSONS_LEARNED}.md` generated
+- [x] REQ-01 — `AGENTS.md` + `.ai/{ARCHITECTURE,TASKS,FEATURE_HISTORY,LESSONS_LEARNED}.md` generated
       with the init-workspace skill, then rewritten with real project content (deploy commands, DNS
       table, boundaries, verification matrix). [5 files non-empty + no template placeholders]
-- [ ] REQ-02 — Dedicated git repository inside `PixmintGamesLanding` (parent `agents` repo untouched):
+- [x] REQ-02 — Dedicated git repository inside `PixmintGamesLanding` (parent `agents` repo untouched):
       `git init`, `.gitignore`, `README.md`. [git repo root correct, ignore rules effective]
-- [ ] REQ-03 — `site/index.html` + `site/assets/styles.css`: brand tokens, accessibility (skip link,
+- [x] REQ-03 — `site/index.html` + `site/assets/styles.css`: brand tokens, accessibility (skip link,
       focus-visible, reduced-motion, contrast >= 4.5:1, sticky-header scroll margin), one-app-card
       Games section, nav/footer link arrangement, all anchors resolve. Original
       `one-page-landing.html` removed after content parity. [Playwright 1440 + 390, no dead links]
-- [ ] REQ-04 — `site/index.html` head: canonical, OG/Twitter cards, JSON-LD `Organization`,
+- [x] REQ-04 — `site/index.html` head: canonical, OG/Twitter cards, JSON-LD `Organization`,
       favicon set references, `theme-color`, `color-scheme`. [tags present, assets return 200]
-- [ ] REQ-05 — `site/privacy.html`: accurate policy (Firebase Analytics opt-in/off by default,
+- [x] REQ-05 — `site/privacy.html`: accurate policy (Firebase Analytics opt-in/off by default,
       Crashlytics opt-out/on, no ad SDKs, no website cookies, retention, children, GDPR/CCPA,
       deletion contact). [content audit vs app policy; no AdMob mention]
-- [ ] REQ-06 — `site/404.html`, `site/robots.txt`, `site/sitemap.xml`, `site/CNAME`. [files valid,
+- [x] REQ-06 — `site/404.html`, `site/robots.txt`, `site/sitemap.xml`, `site/CNAME`. [files valid,
       sitemap canonical, CNAME = pixmintgames.com]
-- [ ] REQ-07 — `site/assets/`: `favicon-32.png`, `apple-touch-icon.png` (180), `icon-512.png`,
+- [x] REQ-07 — `site/assets/`: `favicon-32.png`, `apple-touch-icon.png` (180), `icon-512.png`,
       `og-image.png` (1200x630), `wordmark.svg`. [dimensions via PIL, each < 200 KB]
-- [ ] REQ-08 — `.github/workflows/pages.yml` deploying only `site/` with `upload-pages-artifact` +
+- [x] REQ-08 — `.github/workflows/pages.yml` deploying only `site/` with `upload-pages-artifact` +
       `deploy-pages`, correct permissions/concurrency. [YAML parses, path scoped]
-- [ ] REQ-09 — Local verification harness: detached static server on `site/`, Playwright desktop +
+- [x] REQ-09 — Local verification harness: detached static server on `site/`, Playwright desktop +
       mobile screenshots, console/network clean, anchor + asset sweep, contrast check.
       [report + screenshot paths]
-- [ ] REQ-10 — GitHub repo created (public), pushed, Pages enabled (`build_type=workflow`), custom
+- [x] REQ-10 — GitHub repo created (public), pushed, Pages enabled (`build_type=workflow`), custom
       domain `pixmintgames.com`. [`gh api /pages` -> built, cname correct]
-- [ ] REQ-11 — Cloudflare `pixmintgames.com`: 4x A + 4x AAAA to GitHub Pages **DNS-only**, `www`
+- [x] REQ-11 — Cloudflare `pixmintgames.com`: 4x A + 4x AAAA to GitHub Pages **DNS-only**, `www`
       proxied placeholder + 301 redirect to apex. [dig matches Pages IPs, `curl -I www` -> 301]
-- [ ] REQ-12 — Cloudflare `pixmint.games`: proxied placeholder records + single 301 redirect rule
+- [x] REQ-12 — Cloudflare `pixmint.games`: proxied placeholder records + single 301 redirect rule
       preserving path and query. [`/foo?bar=1` -> `https://pixmintgames.com/foo?bar=1`, one hop]
-- [ ] REQ-13 — Enforce HTTPS after cert approval; full production matrix (http/https x apex/www x both
+- [x] REQ-13 — Enforce HTTPS after cert approval; full production matrix (http/https x apex/www x both
       domains) + TLS check + evidence report. [`https_enforced: true`, cert approved, statuses match]
 
 ## DAG
@@ -79,4 +79,23 @@ wave 6  REQ-13                                              (needs REQ-10..12 gr
 
 ## Evidence log
 
-(filled during verification)
+## Evidence log
+
+| Date | Req | Evidence |
+| --- | --- | --- |
+| 2026-11-10 | REQ-01 | init-workspace script run, then 5 files rewritten (AGENTS.md 216 lines + 4 `.ai` files); template/placeholder scan clean; every `.ai/*` link resolves |
+| 2026-11-10 | REQ-02 | `git rev-parse --show-toplevel` -> this folder; parent `agents` status byte-identical before/after; 14 ignore rules verified with `git check-ignore`; first commit `5b1b3f3` |
+| 2026-11-10 | REQ-03 | Playwright 1440x900 + 390x844: exactly 1 `h1`, heading order never skips, 0 empty anchors, 0 broken fragments, no horizontal overflow (1425/1425, 375/375), header 73/90px under 96px scroll margin |
+| 2026-11-10 | REQ-04 | canonical + OG + Twitter + JSON-LD `Organization` present, description 126 chars, all 6 referenced assets 200 |
+| 2026-11-10 | REQ-05 | 16 numbered sections, 1,459 words, no AdMob/ad-network mention, no bracket placeholders, 3 external links verified 200 |
+| 2026-11-10 | REQ-06 | sitemap parses (2 canonical URLs, lastmod 2026-11-10), `CNAME` repr `b'pixmintgames.com\n'`, robots ASCII + sitemap pointer, 404 root-absolute link audit pass |
+| 2026-11-10 | REQ-07 | favicon 32, apple-touch 180 (RGB, no alpha), icon 512, OG 1200x630 (34,369 B); image payload 63 KB total; wordmark byte-identical to brand source |
+| 2026-11-10 | REQ-08 | YAML parses; `path: ./site`; `pages: write` + `id-token: write`; no `path: .`; guard fails fast when `site/index.html` or `site/CNAME` missing |
+| 2026-11-10 | REQ-09 | 13/13 local paths 200; 0 console messages; 0 broken images; contrast 4.58:1 (brand on surface-subtle) to 14.59:1 (cream on ink); screenshots in `%TEMP%\opencode\pixmint-proof` |
+| 2026-11-10 | REQ-10 | public repo `gbalabanli/pixmintgames-landing`; run 42847144949 success; `build_type=workflow`; `cname=pixmintgames.com`; github.io artifact 8/8 paths 200 |
+| 2026-11-10 | REQ-11 | apex 4xA `185.199.108-111.153` + 4xAAAA `2606:50c0:8000-8003::153` all DNS-only; `www` proxied placeholder + single 301 to apex on both schemes |
+| 2026-11-10 | REQ-12 | `pixmint.games` and `www.pixmint.games` -> single 301 to apex; `https://pixmint.games/some/path?x=1&y=2` -> `https://pixmintgames.com/some/path?x=1&y=2` (1 hop) |
+| 2026-11-10 | REQ-13 | cert approved (domains `pixmintgames.com`, expires 2027-02-08); `https_enforced: true`; http apex -> 301 https; `ssl_verify=0` on every production URL; custom 404 served (2,890 B) |
+
+Production screenshots: `%TEMP%\opencode\pixmint-proof\prod-index-1440.png`, `prod-index-390.png`,
+`prod-404-390.png`. Release run: `https://github.com/gbalabanli/pixmintgames-landing/actions`.
