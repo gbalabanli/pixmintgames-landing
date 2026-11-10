@@ -5,6 +5,43 @@ not silently reverse.
 
 ---
 
+## 2026-11-10 — Google Play developer account (organization)
+
+**Goal:** create the Play Console account required to publish PixMint, under the studio identity rather
+than a personal one.
+
+### What shipped
+
+- Organization account **PixMint Games**, ID `8589205052734638037`, owned by
+  `pixmintgames@gmail.com`. The owning account is permanent.
+- Google payments profile created and linked; legal identity comes from D&B: `BORA BALABANLI`,
+  DUNS `751177348`, `32/3 AYDINEVLER MAHALLESI / SANAYI CADDESI, MALTEPE / Istanbul (Anatolia) 34854 /
+  Türkiye`. USD 25 registration fee paid.
+- Public profile: developer name `PixMint Games`, public phone `+905301178034`,
+  `contact@pixmintgames.com` verified, publication consent given.
+- Search Console *domain* property `pixmintgames.com` verified with an apex TXT record; Play Console
+  website verification then auto-approved because the same account owns the property.
+- Email Routing proven end to end: Google's verification codes sent to `contact@` arrived in Gmail.
+
+### Decisions
+
+1. **Organization, not individual.** The business exists and has a DUNS, and some app categories can
+   only be distributed by organizations.
+2. **`pixmintgames@gmail.com` owns the account**, keeping studio and personal identities separate.
+   This cannot be reversed later, so it was decided before the first click.
+3. **Address entered exactly as D&B holds it**, not the vergi levhası wording, because Google matches
+   the D&B record. Any mismatch is fixed at D&B (UPIK), not in Play Console.
+4. **Domain property (DNS TXT) over URL-prefix verification**: it covers apex, `www` and every
+   subdomain, and survives site changes. The TXT record must never be deleted.
+
+### Outstanding (owner)
+
+- Identity documents (government ID + selfie).
+- Trader-status declaration (DSA requirement).
+- Phone verification, which only unlocks after identity and organization are approved.
+
+---
+
 ## 2026-11-10 — Contact mailbox live via Cloudflare Email Routing
 
 **Goal:** make `contact@pixmintgames.com` — published on every page and in the privacy policy —

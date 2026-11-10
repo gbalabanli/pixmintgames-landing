@@ -113,8 +113,12 @@ Owner: project owner (Bora). Resolve before or shortly after launch.
 - [x] **Contact mailbox — live 2026-11-10.** Cloudflare Email Routing enabled on `pixmintgames.com`
       (MX `route1/2/3.mx.cloudflare.net`, SPF `include:_spf.mx.cloudflare.net`, DKIM
       `cf2024-1._domainkey`), destination `pixmintgames@gmail.com` verified, rule
-      `contact@pixmintgames.com` → forward → `pixmintgames@gmail.com` enabled. Outstanding: one
-      end-to-end test message from an external account to confirm delivery.
+      `contact@pixmintgames.com` → forward → `pixmintgames@gmail.com` enabled. **End-to-end test
+      passed 2026-11-10**: Google Play verification codes sent to `contact@` arrived in the Gmail inbox.
+- [x] **Google Play developer account — created 2026-11-10.** Organization account `PixMint Games`,
+      ID `8589205052734638037`, owner `pixmintgames@gmail.com`; payments profile mirrors DUNS
+      `751177348`; website verification complete via the Search Console domain property.
+      Outstanding (owner): identity documents, trader-status declaration, phone verification.
 - [ ] **Play Store listing URL.** Once the first app is published, replace the non-link
       "Coming soon to Google Play" span in the Games card with the real listing URL (`target="_blank"`
       + `rel="noopener"`), and update the JSON-LD `sameAs` if applicable.

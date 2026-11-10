@@ -200,6 +200,25 @@ the Cloudflare verification mail sent to the destination inbox.
 Adding an alias such as `privacy@` is one extra rule in the same zone. Keep the site's `mailto:`
 links pointed at `contact@`.
 
+## Google Play / Search Console
+
+- **Developer account:** `PixMint Games`, organization account, ID `8589205052734638037`, owner
+  `pixmintgames@gmail.com`. The owning Google account is permanent — it cannot be changed after
+  creation; additional people must be invited as members.
+- **Legal identity comes from the Google payments profile**, which mirrors Dun & Bradstreet:
+  `BORA BALABANLI`, DUNS `751177348`, `32/3 AYDINEVLER MAHALLESI / SANAYI CADDESI, MALTEPE /
+  Istanbul (Anatolia) 34854 / Türkiye`. If Play rejects the organization, fix the record at D&B
+  (UPIK), not in Play Console.
+- **Search Console:** *domain* property `pixmintgames.com`, owned by `pixmintgames@gmail.com`,
+  verified with the apex TXT record
+  `google-site-verification=ZeV33dNdGh8Rf7CCP6Vg0CzXcmM4aPYKZ7Eicx_LX7M`.
+  **Never delete that TXT record** — losing it loses Search Console ownership and with it the Play
+  Console website verification.
+- Play Console website verification is **complete** (it auto-approved because the same account owns
+  the Search Console property). Outstanding at the time of writing: identity documents, trader-status
+  declaration, and phone verification (the phone step stays blocked until identity and organization
+  are approved).
+
 ## Indexing (pre-launch)
 
 Indexing is **deliberately disabled** until launch, on both crawler layers:
