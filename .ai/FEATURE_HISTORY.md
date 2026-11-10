@@ -13,6 +13,10 @@ every page; and keep the pre-launch site out of every search index. Shipped 2026
 
 ### What shipped
 
+- **Footer legal line** trimmed and set in caps: `BORA BALABANLI · Aydınevler Mahallesi 32/3,
+  34854 İstanbul (Anadolu), Türkiye` (the studio name was redundant there; the developer name is
+  now uppercase everywhere it appears, including the contact card, privacy §1/§16 and JSON-LD
+  `legalName`).
 - **Palette v2** in `site/assets/styles.css`: `--ink #0B0810`, `--surface #171221`,
   `--surface-subtle #110D18`, `--border #403A64`, `--brand #FF5E1A` (hsl 18 100% 55%),
   `--brand-hot #FFA733` (hsl 34 100% 60%), `--brand-deep #E62600` (hsl 10 100% 45%),
